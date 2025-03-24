@@ -1,6 +1,6 @@
 package org.example.matrix;
 
-class Matrix {
+public class Matrix {
     private final int[][] data;
 
     public Matrix(int rows, int cols) {

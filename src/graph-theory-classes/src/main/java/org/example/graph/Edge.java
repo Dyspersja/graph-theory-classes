@@ -16,4 +16,9 @@ public class Edge {
     public Vertex getV2() {
         return v2;
     }
+
+    @Override
+    public String toString() {
+        return v1 + "-" + v2;
+    }
 }
