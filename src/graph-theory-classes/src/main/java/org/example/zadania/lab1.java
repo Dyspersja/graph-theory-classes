@@ -7,13 +7,11 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class lab1 {
-    public static void zad1() {
+    public static void zad1(Scanner consoleInput) {
         System.out.println("Podaj nazwe pliku tekstowego z rozszerzeniem:");
 
         // src/main/resources/lab1/zad1/graph.txt
-        Scanner consoleInput = new Scanner(System.in);
         String filePath = consoleInput.nextLine();
-        consoleInput.close();
 
         Graph graph = new Graph();
 
@@ -46,6 +44,21 @@ public class lab1 {
             System.out.println("Macierz incydencji M =");
             System.out.println(incidenceMatrix);
 
+        } catch (IOException e) {
+            System.err.println("Error loading graph from file: " + e.getMessage());
+        }
+    }
+
+    public static void zad2(Scanner consoleInput) {
+        System.out.println("Podaj nazwe pliku tekstowego z rozszerzeniem:");
+
+        // src/main/resources/lab1/zad2/graph.txt
+        String filePath = consoleInput.nextLine();
+
+        Graph graph = new Graph();
+
+        try {
+            graph.loadFromFile(filePath);
         } catch (IOException e) {
             System.err.println("Error loading graph from file: " + e.getMessage());
         }
