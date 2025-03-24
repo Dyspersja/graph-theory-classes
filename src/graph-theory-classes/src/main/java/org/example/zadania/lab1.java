@@ -10,7 +10,7 @@ public class lab1 {
     public static void zad1(Scanner consoleInput) {
         System.out.println("Podaj nazwe pliku tekstowego z rozszerzeniem:");
 
-        // src/main/resources/lab1/zad1/graph.txt
+        // src/main/resources/lab1/graph.txt
         String filePath = consoleInput.nextLine();
 
         Graph graph = new Graph();
@@ -52,7 +52,7 @@ public class lab1 {
     public static void zad2(Scanner consoleInput) {
         System.out.println("Podaj nazwe pliku tekstowego z rozszerzeniem:");
 
-        // src/main/resources/lab1/zad2/graph.txt
+        // src/main/resources/lab1/graph.txt
         String filePath = consoleInput.nextLine();
 
         Graph graph = new Graph();

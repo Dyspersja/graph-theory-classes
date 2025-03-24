@@ -7,10 +7,8 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         try (Scanner consoleInput = new Scanner(System.in)) {
-            // src/main/resources/lab1/zad1/graph.txt
+            // src/main/resources/lab1/graph.txt
             printTaskHeader(1,1); lab1.zad1(consoleInput);
-
-            // src/main/resources/lab1/zad2/graph.txt
             printTaskHeader(1,2); lab1.zad2(consoleInput);
         }
     }
