@@ -10,6 +10,9 @@ public class Main {
             // src/main/resources/lab1/graph.txt
             printTaskHeader(1,1); lab1.zad1(consoleInput);
             printTaskHeader(1,2); lab1.zad2(consoleInput);
+            printTaskHeader(1,3); lab1.zad3(consoleInput);
+            printTaskHeader(1,4); lab1.zad4(consoleInput);
+            printTaskHeader(1,5); lab1.zad5(consoleInput);
         }
     }
 
