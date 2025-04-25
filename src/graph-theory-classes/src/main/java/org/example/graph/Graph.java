@@ -24,6 +24,11 @@ public class Graph {
         vertices.putIfAbsent(id, new Vertex(id));
     }
 
+    public void removeVertex(int id) {
+        vertices.remove(id);
+        edges.removeIf(edge -> edge.getV1().getId() == id || edge.getV2().getId() == id);
+    }
+
     public void addEdge(int id1, int id2) {
         vertices.putIfAbsent(id1, new Vertex(id1));
         Vertex v1 = vertices.get(id1);
@@ -110,6 +115,19 @@ public class Graph {
         return degrees;
     }
 
+    public int getRegularDegree() {
+        Map<Integer, Integer> degrees = getDegrees();
+
+        int expected = degrees.values().iterator().next();
+        for (int degree : degrees.values()) {
+            if (degree != expected) {
+                return -1;
+            }
+        }
+
+        return expected;
+    }
+
     public Set<Edge> getComplement() {
         Set<Edge> complementEdges = new HashSet<>();
 
@@ -144,6 +162,104 @@ public class Graph {
     public boolean isComplete() {
         int n = vertices.size();
         return edges.size() == (n * (n - 1)) / 2;
+    }
+
+    public boolean isCyclic() {
+        if(!this.isConnected()) return false;
+        return this.getRegularDegree() == 2;
+    }
+
+    public boolean isConnected() {
+        int startVertex = vertices.keySet().iterator().next();
+
+        Set<Integer> visited = new HashSet<>();
+        dfs(startVertex, visited);
+
+        return visited.size() == vertices.size();
+    }
+
+    public boolean isEulerian() {
+        if (!isConnected()) return false;
+
+        Map<Integer, Integer> degrees = getDegrees();
+        for (int degree : degrees.values()) {
+            if (degree % 2 != 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean isSemiEulerian() {
+        if (!isConnected()) return false;
+
+        Map<Integer, Integer> degrees = getDegrees();
+        int oddDegreeCount = 0;
+
+        for (int degree : degrees.values()) {
+            if (degree % 2 != 0) {
+                oddDegreeCount++;
+            }
+        }
+
+        return oddDegreeCount == 2;
+    }
+
+    public boolean isNonEulerian() {
+        return !isEulerian() && !isSemiEulerian();
+    }
+
+    public boolean isWheelAndTransformToCycle() {
+        if (vertices.size() < 4) return false;
+
+        Map<Integer, Integer> degrees = getDegrees();
+        int centerVertex = -1;
+        int maxDegree = -1;
+
+        for (Map.Entry<Integer, Integer> entry : degrees.entrySet()) {
+            if (entry.getValue() > maxDegree) {
+                maxDegree = entry.getValue();
+                centerVertex = entry.getKey();
+            }
+        }
+
+        if (maxDegree != vertices.size() - 1) {
+            return false;
+        }
+
+        removeVertex(centerVertex);
+        return this.isCyclic();
+    }
+
+    public void transformToWheelGraph() {
+        if (!isCyclic()) return;
+
+        int centralVertexId = vertices.size() + 1;
+        this.addVertex(centralVertexId);
+
+        for (int v : vertices.keySet()) {
+            if (centralVertexId == v) continue;
+            this.addEdge(centralVertexId, v);
+        }
+    }
+
+    private void dfs(int current, Set<Integer> visited) {
+        visited.add(current);
+
+        for (Edge edge : edges) {
+            if (edge.getV1().getId() == current) {
+                int neighbor = edge.getV2().getId();
+                if(!visited.contains(neighbor)) {
+                    dfs(neighbor, visited);
+                }
+            } else if (edge.getV2().getId() == current) {
+                int neighbor = edge.getV1().getId();
+                if(!visited.contains(neighbor)) {
+                    dfs(neighbor, visited);
+                }
+            }
+        }
     }
 
     @Override
