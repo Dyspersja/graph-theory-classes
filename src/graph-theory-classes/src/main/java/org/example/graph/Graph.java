@@ -5,13 +5,17 @@ import org.example.matrix.Matrix;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 public class Graph {
+    private String name;
+
     private final Map<Integer, Vertex> vertices;
     private final List<Edge> edges;
 
     public Graph() {
+        name = "G";
         vertices = new HashMap<>();
         edges = new ArrayList<>();
     }
@@ -42,6 +46,28 @@ public class Graph {
                 int v2 = Integer.parseInt(parts[1]);
                 addEdge(v1, v2);
             });
+        }
+    }
+
+    public void loadFromStructuredFile(String filePath) throws IOException {
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            br.lines().forEach(line -> {
+                int index = line.indexOf(';');
+                if (index == -1) return;
+
+                String edge = line.substring(0,index);
+                String[] parts = edge.split("--");
+
+                int v1 = Integer.parseInt(parts[0].trim());
+                int v2 = Integer.parseInt(parts[1].trim());
+                addEdge(v1, v2);
+            });
+        }
+    }
+
+    public void saveToFile(String filePath) throws IOException {
+        try (PrintWriter writer = new PrintWriter(filePath)) {
+            writer.print(this);
         }
     }
 
@@ -118,6 +144,32 @@ public class Graph {
     public boolean isComplete() {
         int n = vertices.size();
         return edges.size() == (n * (n - 1)) / 2;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("graph ");
+        sb.append(this.name);
+        sb.append(" {\n");
+
+        for (Edge edge : edges) {
+            int v1 = edge.getV1().getId();
+            int v2 = edge.getV2().getId();
+            sb.append("    ").append(v1).append(" -- ").append(v2).append(";\n");
+        }
+        sb.append("}");
+
+        return sb.toString();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Map<Integer, Vertex> getVertices() {
